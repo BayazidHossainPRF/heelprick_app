@@ -30,11 +30,11 @@ class UserPrefs {
 
   static Future<UserModel> getUser() async {
     final prefs = await SharedPreferences.getInstance();
-    print('get user from prefs');
+  //  print('get user from prefs');
     final jsonStr = prefs.getString(UserEnum.userPrefsKey.name) ?? '';
-    print('json str : $jsonStr');
+  //  print('json str : $jsonStr');
     final userJson = jsonDecode(jsonStr);
-    print('user json : $userJson');
+  //  print('user json : $userJson');
     userModel = UserModel.fromJson(userJson);
     return userModel;
   }

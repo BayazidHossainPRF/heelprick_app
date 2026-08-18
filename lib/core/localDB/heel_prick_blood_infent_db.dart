@@ -8,7 +8,7 @@ class HeelPrickBloodInfantDb {
   Future<void> deleteAllForms() async {
     final db = await DataDb.instance.database;
     await db.delete(HeelPrickBloodInfantFields.TABLE_NAME);
-    print('All heel prick blood infant forms deleted');
+  //  print('All heel prick blood infant forms deleted');
   }
 
   Future<bool> updateForm(HeelPrickBloodInfantModel model) async {
@@ -20,10 +20,10 @@ class HeelPrickBloodInfantDb {
         where: '${HeelPrickBloodInfantFields.infantId} = ?',
         whereArgs: [model.infantId],
       );
-      print('Heel prick blood infant form with ID ${model.infantId} updated');
+    //  print('Heel prick blood infant form with ID ${model.infantId} updated');
       return rowsAffected > 0;
     } catch (e) {
-      print('Error updating form with ID ${model.infantId}: $e');
+    //  print('Error updating form with ID ${model.infantId}: $e');
       return false;
     }
   }
@@ -36,10 +36,10 @@ class HeelPrickBloodInfantDb {
         where: '${HeelPrickBloodInfantFields.infantId} = ?',
         whereArgs: [infantId],
       );
-      print('Heel prick blood infant form with ID $infantId deleted');
+    //  print('Heel prick blood infant form with ID $infantId deleted');
       return rowsAffected > 0;
     } catch (e) {
-      print('Error deleting form with ID $infantId: $e');
+    //  print('Error deleting form with ID $infantId: $e');
       return false;
     }
   }
@@ -58,7 +58,7 @@ class HeelPrickBloodInfantDb {
       await batch.commit();
       return true;
     } catch (e) {
-      print('Error creating all forms: $e');
+    //  print('Error creating all forms: $e');
       return false;
     }
   }
@@ -73,9 +73,9 @@ class HeelPrickBloodInfantDb {
         model.toJson(),
         conflictAlgorithm: ConflictAlgorithm.replace,
       );
-      print('Heel prick blood infant form created successfully');
+    //  print('Heel prick blood infant form created successfully');
     } catch (e) {
-      print('Error creating form: $e');
+    //  print('Error creating form: $e');
       return false;
     }
     return true;
@@ -93,14 +93,14 @@ class HeelPrickBloodInfantDb {
     required HeelPrickBloodInfantModel model,
   }) async {
     final db = await DataDb.instance.database;
-    final res = await db.insert(
+     await db.insert(
       HeelPrickBloodInfantFields.TABLE_NAME,
       model.toJson(),
       conflictAlgorithm: ConflictAlgorithm.ignore,
     );
-    print('Form initiate response: $res');
+  //  print('Form initiate response: $res');
     final newModel = await getFormById(infantId: model.infantId);
-    print('Form get by infant id: ${model.infantId}: ${newModel == null}');
+  //  print('Form get by infant id: ${model.infantId}: ${newModel == null}');
     return newModel;
   }
 
@@ -294,7 +294,7 @@ class HeelPrickBloodInfantDb {
         return null;
       }
     } catch (e) {
-      print('Error getting form with ID $infantId: $e');
+    //  print('Error getting form with ID $infantId: $e');
       return null;
     }
   }
@@ -310,7 +310,7 @@ class HeelPrickBloodInfantDb {
       );
       return maps.isNotEmpty;
     } catch (e) {
-      print('Error checking form with ID $infantId: $e');
+    //  print('Error checking form with ID $infantId: $e');
       return false;
     }
   }
@@ -323,7 +323,7 @@ class HeelPrickBloodInfantDb {
       );
       return result.first['count'] as int;
     } catch (e) {
-      print('Error counting forms: $e');
+    //  print('Error counting forms: $e');
       return 0;
     }
   }
@@ -370,7 +370,7 @@ class HeelPrickBloodInfantDb {
           );''');
       return result.first['count'] as int;
     } catch (e) {
-      print('Error counting forms: $e');
+    //  print('Error counting forms: $e');
       return 0;
     }
   }
@@ -392,7 +392,7 @@ class HeelPrickBloodInfantDb {
           .map((map) => HeelPrickBloodInfantModel.fromJson(map))
           .toList();
     } catch (e) {
-      print('Error getting forms by cluster: $e');
+    //  print('Error getting forms by cluster: $e');
       return [];
     }
   }
@@ -412,7 +412,7 @@ class HeelPrickBloodInfantDb {
           .map((map) => HeelPrickBloodInfantModel.fromJson(map))
           .toList();
     } catch (e) {
-      print('Error getting forms by sex: $e');
+    //  print('Error getting forms by sex: $e');
       return [];
     }
   }
@@ -434,7 +434,7 @@ class HeelPrickBloodInfantDb {
           .map((map) => HeelPrickBloodInfantModel.fromJson(map))
           .toList();
     } catch (e) {
-      print('Error getting forms by visit type: $e');
+    //  print('Error getting forms by visit type: $e');
       return [];
     }
   }
@@ -457,7 +457,7 @@ class HeelPrickBloodInfantDb {
           .map((map) => HeelPrickBloodInfantModel.fromJson(map))
           .toList();
     } catch (e) {
-      print('Error getting forms by date range: $e');
+    //  print('Error getting forms by date range: $e');
       return [];
     }
   }
@@ -515,7 +515,7 @@ class HeelPrickBloodInfantDb {
         'visitTypeStats': visitTypeStats,
       };
     } catch (e) {
-      print('Error getting form statistics: $e');
+    //  print('Error getting form statistics: $e');
       return {
         'totalForms': '0',
         'maleCount': 0,
@@ -540,7 +540,7 @@ class HeelPrickBloodInfantDb {
           .map((map) => HeelPrickBloodInfantModel.fromJson(map))
           .toList();
     } catch (e) {
-      print('Error getting unsynchronized forms: $e');
+    //  print('Error getting unsynchronized forms: $e');
       return [];
     }
   }
@@ -556,7 +556,7 @@ class HeelPrickBloodInfantDb {
       );
       return rowsAffected;
     } catch (e) {
-      print('Error updating sync date: $e');
+    //  print('Error updating sync date: $e');
       return 0;
     }
   }

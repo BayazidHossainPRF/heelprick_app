@@ -39,7 +39,7 @@ class LocationService {
 
       return position;
     } catch (e) {
-      print('Error getting location: $e');
+    //  print('Error getting location: $e');
       return null;
     }
   }
@@ -71,7 +71,7 @@ class LocationService {
           await Future.delayed(delay);
         }
       } catch (e) {
-        print('Location attempt $i failed: $e');
+      //  print('Location attempt $i failed: $e');
       }
     }
     
@@ -96,7 +96,7 @@ class LocationService {
     try {
       return await Geolocator.getLastKnownPosition();
     } catch (e) {
-      print('Error getting last known position: $e');
+    //  print('Error getting last known position: $e');
       return null;
     }
   }
@@ -114,7 +114,7 @@ class LocationService {
       }
       return null;
     } catch (e) {
-      print('Error getting address: $e');
+    //  print('Error getting address: $e');
       return null;
     }
   }

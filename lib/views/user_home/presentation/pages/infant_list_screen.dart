@@ -156,6 +156,6 @@ class _InfantListScreenState extends State<InfantListScreen> {
       AppRoutes.HEELPRICKBLOODCOLLECTIONFORMSCREEN,
       arguments: infant,
     );
-    print('Navigate to detail: ${infant.infantId}');
+  //  print('Navigate to detail: ${infant.infantId}');
   }
 }

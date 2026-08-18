@@ -39,7 +39,7 @@
 //       _cacheLocation(position);
 //       return position;
 //     } catch (e) {
-//       print('Location error: $e');
+//     //  print('Location error: $e');
       
 //       // Try to get from shared preferences as fallback
 //       if (useCache) {
@@ -66,7 +66,7 @@
 //       await prefs.setDouble('last_accuracy', position.accuracy ?? 0.0);
 //       await prefs.setString('last_location_time', DateTime.now().toIso8601String());
 //     } catch (e) {
-//       print('Error storing location: $e');
+//     //  print('Error storing location: $e');
 //     }
 //   }
 
@@ -99,7 +99,7 @@
 //         }
 //       }
 //     } catch (e) {
-//       print('Error reading stored location: $e');
+//     //  print('Error reading stored location: $e');
 //     }
 //     return null;
 //   }

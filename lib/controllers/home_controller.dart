@@ -36,6 +36,12 @@ class HomeController extends GetxController {
   final RxInt _pendingUpdates = 0.obs;
   final RxString _appVersion = ''.obs;
   UserModel _currentUser = UserModel();
+  final RxString _totalEn = ''.obs;
+  final RxString _syncEn = ''.obs;
+  final RxString _totalAs = ''.obs;
+  final RxString _syncAs = ''.obs;
+  final RxString _totalGf = ''.obs;
+  final RxString _syncGf = ''.obs;
 
   // Getter methods
   String get totalCompleted => _totalCompleted.value;
@@ -54,6 +60,12 @@ class HomeController extends GetxController {
   int get totalChild => _totalChild.value;
   int get todoChild => _todoChild.value;
   String get appVersion => _appVersion.value;
+  String get totalEn => _totalEn.value;
+  String get syncEn => _syncEn.value;
+  String get totalAs => _totalAs.value;
+  String get syncAs => _syncAs.value;
+  String get totalGf => _totalGf.value;
+  String get syncGf => _syncGf.value;
 
   // Initialize with sample data (replace with actual data loading)
   @override
@@ -62,6 +74,7 @@ class HomeController extends GetxController {
     calculateStatistics();
     getUser();
     getAppVersion();
+    fetchSummary();
   }
 
   void getUser() async {
@@ -75,11 +88,11 @@ class HomeController extends GetxController {
     await Future.delayed(const Duration(seconds: 2));
     // final  = await UserPrefs.get(key: UserEnum.userIdKey);
     final url = Uri.parse('${AppSecrets.host}sync_heel_prick_infent_data.php');
-    print('calling api : ${url.toString()}');
+    // print('calling api : ${url.toString()}');
 
     try {
       final response = await http.get(url);
-      print(response.body);
+      // print(response.body);
       if (response.statusCode == 200) {
         List<dynamic> jsonData = jsonDecode(response.body);
 
@@ -95,9 +108,14 @@ class HomeController extends GetxController {
               model: heelPrickBloodInfantModel,
             );
           } catch (e) {
-            print(
-              'Error inserting infant enrollment with ID ${heelPrickBloodInfantModel.infantId}: $e',
+            Snackbar.show_e(
+              message:
+                  'Error inserting infant enrollment with ID ${heelPrickBloodInfantModel.infantId}: $e',
+              durationInSecond: 2,
             );
+            // print(
+            //   'Error inserting infant enrollment with ID ${heelPrickBloodInfantModel.infantId}: $e',
+            // );
           }
         }
         await UserPrefs.set(
@@ -114,7 +132,7 @@ class HomeController extends GetxController {
             backgroundColor: AppPallete.acceptColor,
           ),
         );
-        print("Data saved successfully!");
+        // print("Data saved successfully!");
       } else {
         Get.showSnackbar(
           GetSnackBar(
@@ -125,10 +143,10 @@ class HomeController extends GetxController {
             backgroundColor: AppPallete.dangerColor,
           ),
         );
-        print("Error: ${response.statusCode}");
+        // print("Error: ${response.statusCode}");
       }
     } catch (e) {
-      print("Exception: $e");
+      // print("Exception: $e");
       Get.showSnackbar(
         GetSnackBar(
           title: 'Child data download failed',
@@ -260,12 +278,12 @@ class HomeController extends GetxController {
     // final header = getHeader();
     try {
       for (final newFollowup in newFollowups) {
-        print('Uploading form with ID: ${newFollowup.endDate}');
+        // print('Uploading form with ID: ${newFollowup.endDate}');
         final response = await http.post(
           url,
           body: json.encode(newFollowup.toJson()),
         );
-        print(response.body);
+        // print(response.body);
         final resData = json.decode(response.body);
         if (resData['status'] == 'success') {
           Snackbar.show_s(
@@ -289,7 +307,7 @@ class HomeController extends GetxController {
       );
       await Future.delayed(const Duration(seconds: 2));
     } catch (e) {
-      print('Error fetching products: $e');
+      // print('Error fetching products: $e');
     } finally {
       _isDataUploading.value = false;
     }
@@ -307,10 +325,10 @@ class HomeController extends GetxController {
             alter TABLE tbl_infant_enrollment add COLUMN Mobile TEXT null;
           ''',
       );
-      print('New Query run success');
+      // print('New Query run success');
     } catch (e) {
-      print('New query Exception');
-      print(e.toString());
+      // print('New query Exception');
+      // print(e.toString());
     }
     _newQuery.value = false;
   }
@@ -325,7 +343,7 @@ class HomeController extends GetxController {
     // final header = getHeader();
     try {
       final response = await http.get(url);
-      print(response.body);
+      // print(response.body);
       final resData = json.decode(response.body);
       if (resData['version'] == _appVersion.value) {
         Snackbar.show_s(
@@ -337,7 +355,7 @@ class HomeController extends GetxController {
         return resData['apk_url'];
       } // checkNewCount();
     } catch (e) {
-      print('Error fetching products: $e');
+      // print('Error fetching products: $e');
       Snackbar.show_e(message: 'Ex: $e', durationInSecond: 2);
     }
     return null;
@@ -345,9 +363,9 @@ class HomeController extends GetxController {
 
   Future<void> downloadAndInstallApk(String url) async {
     try {
-      print('calling download apk');
+      // print('calling download apk');
       final response = await http.get(Uri.parse(url));
-      print('res find');
+      // print('res find');
       if (response.statusCode == 200) {
         // final dir = await getExternalStorageDirectory();
         Directory downloadsDir = Directory("/storage/emulated/0/Download");
@@ -359,14 +377,24 @@ class HomeController extends GetxController {
         );
 
         // await Future.delayed(const Duration(seconds: 2));
-        print('going to open file');
+        // print('going to open file');
         await OpenFile.open(file.path);
-        print('after file open');
+        // print('after file open');
       } else {
         throw Exception();
       }
     } catch (e) {
       Snackbar.show_e(message: 'অ্যাপ ডাউনলোড করা যায়নি', durationInSecond: 2);
     }
+  }
+
+  void fetchSummary() async {
+    final data = await EnrollmentFormDb.instance.getSyncStatistic();
+    _totalEn.value = data[0]['total'].toString();
+    _syncEn.value = data[0]['sync'].toString();
+    _totalAs.value = data[1]['total'].toString();
+    _syncAs.value = data[1]['sync'].toString();
+    _totalGf.value = data[2]['total'].toString();
+    _syncGf.value = data[2]['sync'].toString();
   }
 }

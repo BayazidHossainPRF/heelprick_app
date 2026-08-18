@@ -27,12 +27,12 @@
 //       );
 //     }
 //     Uri url = Uri.parse('${AppSecrets.host}/getServerQuery.php?userId=$userId');
-//     print(url.toString());
+//   //  print(url.toString());
 //     http
 //         .get(url)
 //         .then((response) async {
-//           print('Response status: ${response.statusCode}');
-//           print('response body: ${response.body}');
+//         //  print('Response status: ${response.statusCode}');
+//         //  print('response body: ${response.body}');
 
 //           if (response.statusCode == 200) {
 //             final List<dynamic> data = json.decode(response.body)['data'];
@@ -81,7 +81,7 @@
 //           }
 //         })
 //         .catchError((error) {
-//           print(error);
+//         //  print(error);
 //           Get.showSnackbar(
 //             GetSnackBar(
 //               title: 'Failed',

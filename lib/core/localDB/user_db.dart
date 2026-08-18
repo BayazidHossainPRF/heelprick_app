@@ -120,15 +120,15 @@ class UserDb {
         whereArgs: [userId, password],
       );
       if (maps.isNotEmpty) {
-        print('user in database : ${maps.first}');
+      //  print('user in database : ${maps.first}');
         await UserPrefs.setUser(userJson: maps.first);
         return true;
       } else {
-        print('No Report found in database_____________________');
+      //  print('No Report found in database_____________________');
         return false;
       }
     } catch (e) {
-      print('Error in:_____________________ $e');
+    //  print('Error in:_____________________ $e');
       return false;
     }
   }

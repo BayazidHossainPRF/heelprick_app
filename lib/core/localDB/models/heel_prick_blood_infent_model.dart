@@ -52,10 +52,10 @@ class HeelPrickBloodInfantModel {
   });
 
   factory HeelPrickBloodInfantModel.fromJson(Map<String, dynamic> json) {
-    print('json data : ${json}');
-    print(
-      'end date : ${json[HeelPrickBloodInfantFields.endDate].toString().trim()}',
-    );
+  //  print('json data : ${json}');
+  //  print(
+    //   'end date : ${json[HeelPrickBloodInfantFields.endDate].toString().trim()}',
+    // );
     return HeelPrickBloodInfantModel(
       infantId: json[HeelPrickBloodInfantFields.infantId].toString().trim(),
       cluster: json[HeelPrickBloodInfantFields.cluster].toString().trim(),

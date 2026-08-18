@@ -8,7 +8,7 @@
     <uses-permission android:name="android.permission.ACCESS_BACKGROUND_LOCATION" /> 
     <uses-permission android:name="android.permission.ACCESS_MEDIA_LOCATION" />
     <application
-        android:label="heel_prick_blood_collection"
+        android:label="Multi Omics"
         android:name="${applicationName}"
         android:icon="@mipmap/launcher_icon">
         <activity

@@ -261,7 +261,7 @@ class _HeelPrickBloodCollectionFormScreenState
               isEnable: true,
               isHidden: false,
               callback: () {
-                print('Time selected: ${_q2_bController.text}');
+              //  print('Time selected: ${_q2_bController.text}');
               },
             ),
           ),
@@ -420,7 +420,7 @@ class _HeelPrickBloodCollectionFormScreenState
               isEnable: true,
               isHidden: false,
               callback: () {
-                print('Time selected: ${_q3_fController.text}');
+              //  print('Time selected: ${_q3_fController.text}');
               },
             ),
           ),
@@ -664,7 +664,7 @@ class _HeelPrickBloodCollectionFormScreenState
       );
       return;
     }
-    print(formModel!.toJson());
+  //  print(formModel!.toJson());
 
     _loadExistingData();
   }
@@ -785,7 +785,7 @@ class _HeelPrickBloodCollectionFormScreenState
     //     );
     //   }
     // }
-    print('Saving form: ${formModel!.toJson()}');
+  //  print('Saving form: ${formModel!.toJson()}');
 
     await HeelPrickBloodCollectionFormDb.instance.updateForm(formModel!);
   }

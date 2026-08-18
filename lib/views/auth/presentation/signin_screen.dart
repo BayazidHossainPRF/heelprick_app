@@ -68,7 +68,7 @@ class SigninScreen extends StatelessWidget {
 
         // App Name
         const Text(
-          'Multi-Omics for Mothers and Infants(MOMI)',
+          'Multi-Omics Study',
           textAlign: TextAlign.center,
           style: TextStyle(
             fontSize: 28,

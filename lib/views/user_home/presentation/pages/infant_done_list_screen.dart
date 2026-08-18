@@ -243,12 +243,12 @@ class _InfantDoneListScreenState extends State<InfantDoneListScreen> {
   // void _navigateToDetail(HeelPrickBloodInfantModel infant) {
   //   // Navigate to detail screen
   //   // Get.to(() => InfantDetailScreen(model: infant));
-  //   print('Navigate to detail: ${infant.infantId}');
+  // //  print('Navigate to detail: ${infant.infantId}');
   // }
 
   // void _navigateToEdit(HeelPrickBloodInfantModel infant) {
   //   // Navigate to edit screen
   //   // Get.to(() => InfantEditScreen(model: infant));
-  //   print('Navigate to edit: ${infant.infantId}');
+  // //  print('Navigate to edit: ${infant.infantId}');
   // }
 }

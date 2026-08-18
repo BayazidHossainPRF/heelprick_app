@@ -24,7 +24,7 @@ class InfantController extends GetxController {
           listType: listType,
         );
     _screenings.assignAll(infantList);
-    print('decoded list : ${infantList.length}');
+    // print('decoded list : ${infantList.length}');
     toggleLoading();
   }
 

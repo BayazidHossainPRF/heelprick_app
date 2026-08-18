@@ -38,7 +38,7 @@
 //             controller: controller,
 //             onTap: () {
 //               _showImageUploadDialog(context);
-//               print('image pic clicked');
+//             //  print('image pic clicked');
 //             },
 //             onChanged: (value) {
 //               controller.text = '';
@@ -123,7 +123,7 @@
 //       // final bytes = await _image.readAsBytes();
 //       // final base64Image = base64Encode(bytes);
 //       // Send the image to the server
-//       print("Image found");
+//     //  print("Image found");
 //     }
 //   }
 
@@ -131,7 +131,7 @@
 //     final picker = ImagePicker();
 //     final pickedFile = await picker.pickImage(source: imageSource);
 //     if (pickedFile == null) return null;
-//     print('\n path is : pickedFile.path');
+//   //  print('\n path is : pickedFile.path');
 //     final bytes = await pickedFile.readAsBytes();
 //     if (!widget.fieldProperties.multiImage!) {
 //       widget.imageController.clear();

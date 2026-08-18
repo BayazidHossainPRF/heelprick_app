@@ -40,7 +40,7 @@ class CustomPinInputWidgetState extends State<CustomPinInputWidget> {
   }
 
   void _onChanged(String value, int index) {
-    print('+-+ $value, ____ $index +-+');
+  //  print('+-+ $value, ____ $index +-+');
     if (value.isNotEmpty && index < pinLength - 1) {
       _focusNodes[index + 1].requestFocus();
     } else if (index == pinLength - 1 && value.isNotEmpty) {

@@ -120,7 +120,7 @@ class AuthController extends GetxController {
 
     try {
       final response = await http.get(url);
-      print(response.body);
+      // print(response.body);
       if (response.statusCode == 200) {
         List<dynamic> jsonData = jsonDecode(response.body);
 
@@ -130,7 +130,7 @@ class AuthController extends GetxController {
           try {
             await UserDb.instance.createNewUserWithReplace(model: userModel);
           } catch (e) {
-            print('Error inserting user with ID ${userModel.userId}: $e');
+            // print('Error inserting user with ID ${userModel.userId}: $e');
           }
         }
         Get.showSnackbar(
@@ -142,7 +142,7 @@ class AuthController extends GetxController {
             backgroundColor: AppPallete.acceptColor,
           ),
         );
-        print("Data saved successfully!");
+        // print("Data saved successfully!");
       } else {
         Get.showSnackbar(
           GetSnackBar(
@@ -153,10 +153,10 @@ class AuthController extends GetxController {
             backgroundColor: AppPallete.dangerColor,
           ),
         );
-        print("Error: ${response.statusCode}");
+        // print("Error: ${response.statusCode}");
       }
     } catch (e) {
-      print("Exception: $e");
+      // print("Exception: $e");
       Get.showSnackbar(
         GetSnackBar(
           title: 'Child data download failed',

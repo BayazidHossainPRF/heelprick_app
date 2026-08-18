@@ -9,20 +9,20 @@ class HeelPrickBloodCollectionFormDb {
   Future<void> deleteAllForms() async {
     final db = await DataDb.instance.database;
     await db.delete(HeelPrickBloodCollectionFormFields.TABLE_NAME);
-    print('All heel prick blood collection forms deleted');
+  //  print('All heel prick blood collection forms deleted');
   }
 
   Future<bool> updateForm(HeelPrickBloodCollectionFormModel model) async {
     final db = await DataDb.instance.database;
-    print(
-      'parimary keys : ${[model.infantId, model.visitType, model.visitDate]}',
-    );
+  //  print(
+    //   'parimary keys : ${[model.infantId, model.visitType, model.visitDate]}',
+    // );
     final newModel = await getFormById(
       infantId: model.infantId,
       visitType: model.visitType,
       visitDate: model.visitDate,
     );
-    print('Form get by infant id: ${model.infantId}: ${newModel == null}');
+  //  print('Form get by infant id: ${model.infantId}: ${newModel == null}');
     try {
       final rowsAffected = await db.update(
         HeelPrickBloodCollectionFormFields.TABLE_NAME,
@@ -31,19 +31,19 @@ class HeelPrickBloodCollectionFormDb {
             '${HeelPrickBloodCollectionFormFields.infantId} = ? AND ${HeelPrickBloodCollectionFormFields.visitType} = ? AND ${HeelPrickBloodCollectionFormFields.visitDate} = ?',
         whereArgs: [model.infantId, model.visitType, model.visitDate],
       );
-      print(
-        'Heel prick blood collection form for infant ${model.infantId} updated $rowsAffected rows',
-      );
+    //  print(
+      //   'Heel prick blood collection form for infant ${model.infantId} updated $rowsAffected rows',
+      // );
       final newModel = await getFormById(
         infantId: model.infantId,
         visitType: model.visitType,
         visitDate: model.visitDate,
       );
-      print('Form get by infant id: ${model.infantId}: ${newModel == null}');
-      print('Updated form data: ${newModel?.toJson()}');
+    //  print('Form get by infant id: ${model.infantId}: ${newModel == null}');
+    //  print('Updated form data: ${newModel?.toJson()}');
       return rowsAffected > 0;
     } catch (e) {
-      print('Error updating form for infant ${model.infantId}: $e');
+    //  print('Error updating form for infant ${model.infantId}: $e');
       return false;
     }
   }
@@ -57,10 +57,10 @@ class HeelPrickBloodCollectionFormDb {
             '${HeelPrickBloodCollectionFormFields.infantId} = ? AND ${HeelPrickBloodCollectionFormFields.visitType} = ?',
         whereArgs: [infantId, visitType],
       );
-      print('Heel prick blood collection form for infant $infantId deleted');
+    //  print('Heel prick blood collection form for infant $infantId deleted');
       return rowsAffected > 0;
     } catch (e) {
-      print('Error deleting form for infant $infantId: $e');
+    //  print('Error deleting form for infant $infantId: $e');
       return false;
     }
   }
@@ -73,12 +73,12 @@ class HeelPrickBloodCollectionFormDb {
         where: '${HeelPrickBloodCollectionFormFields.infantId} = ?',
         whereArgs: [infantId],
       );
-      print(
-        'All heel prick blood collection forms for infant $infantId deleted',
-      );
+    //  print(
+      //   'All heel prick blood collection forms for infant $infantId deleted',
+      // );
       return rowsAffected > 0;
     } catch (e) {
-      print('Error deleting forms for infant $infantId: $e');
+    //  print('Error deleting forms for infant $infantId: $e');
       return false;
     }
   }
@@ -99,7 +99,7 @@ class HeelPrickBloodCollectionFormDb {
       await batch.commit();
       return true;
     } catch (e) {
-      print('Error creating all forms: $e');
+    //  print('Error creating all forms: $e');
       return false;
     }
   }
@@ -114,9 +114,9 @@ class HeelPrickBloodCollectionFormDb {
         model.toJson(),
         conflictAlgorithm: ConflictAlgorithm.replace,
       );
-      print('Heel prick blood collection form created successfully');
+    //  print('Heel prick blood collection form created successfully');
     } catch (e) {
-      print('Error creating form: $e');
+    //  print('Error creating form: $e');
       return false;
     }
     return true;
@@ -141,13 +141,13 @@ class HeelPrickBloodCollectionFormDb {
       model.toJson(),
       conflictAlgorithm: ConflictAlgorithm.ignore,
     );
-    print('Form initiate response: $res');
+  //  print('Form initiate response: $res');
     final newModel = await getFormById(
       infantId: model.infantId,
       visitType: model.visitType,
       visitDate: model.visitDate,
     );
-    print('Form get by infant id: ${model.infantId}: ${newModel == null}');
+  //  print('Form get by infant id: ${model.infantId}: ${newModel == null}');
     return newModel;
   }
 
@@ -201,7 +201,7 @@ class HeelPrickBloodCollectionFormDb {
         return null;
       }
     } catch (e) {
-      print('Error getting form for infant $infantId: $e');
+    //  print('Error getting form for infant $infantId: $e');
       return null;
     }
   }
@@ -223,7 +223,7 @@ class HeelPrickBloodCollectionFormDb {
           .map((map) => HeelPrickBloodCollectionFormModel.fromJson(map))
           .toList();
     } catch (e) {
-      print('Error getting forms for infant $infantId: $e');
+    //  print('Error getting forms for infant $infantId: $e');
       return [];
     }
   }
@@ -240,7 +240,7 @@ class HeelPrickBloodCollectionFormDb {
       );
       return maps.isNotEmpty;
     } catch (e) {
-      print('Error checking form for infant $infantId: $e');
+    //  print('Error checking form for infant $infantId: $e');
       return false;
     }
   }
@@ -253,7 +253,7 @@ class HeelPrickBloodCollectionFormDb {
       );
       return result.first['count'].toString();
     } catch (e) {
-      print('Error counting forms: $e');
+    //  print('Error counting forms: $e');
       return '0';
     }
   }
@@ -277,7 +277,7 @@ class HeelPrickBloodCollectionFormDb {
       }
       return stats;
     } catch (e) {
-      print('Error counting forms by visit type: $e');
+    //  print('Error counting forms by visit type: $e');
       return {};
     }
   }
@@ -300,7 +300,7 @@ class HeelPrickBloodCollectionFormDb {
           .map((map) => HeelPrickBloodCollectionFormModel.fromJson(map))
           .toList();
     } catch (e) {
-      print('Error getting forms by sample status: $e');
+    //  print('Error getting forms by sample status: $e');
       return [];
     }
   }
@@ -323,7 +323,7 @@ class HeelPrickBloodCollectionFormDb {
           .map((map) => HeelPrickBloodCollectionFormModel.fromJson(map))
           .toList();
     } catch (e) {
-      print('Error getting forms by consent status: $e');
+    //  print('Error getting forms by consent status: $e');
       return [];
     }
   }
@@ -346,7 +346,7 @@ class HeelPrickBloodCollectionFormDb {
           .map((map) => HeelPrickBloodCollectionFormModel.fromJson(map))
           .toList();
     } catch (e) {
-      print('Error getting forms by date range: $e');
+    //  print('Error getting forms by date range: $e');
       return [];
     }
   }
@@ -408,7 +408,7 @@ class HeelPrickBloodCollectionFormDb {
         'avgSatisfactoryCircles': avgSatisfactory.toStringAsFixed(1),
       };
     } catch (e) {
-      print('Error getting quality control stats: $e');
+    //  print('Error getting quality control stats: $e');
       return {
         'totalCollected': 0,
         'properlyDried': 0,
@@ -452,7 +452,7 @@ class HeelPrickBloodCollectionFormDb {
 
       return stats;
     } catch (e) {
-      print('Error getting collection reasons stats: $e');
+    //  print('Error getting collection reasons stats: $e');
       return {};
     }
   }
@@ -480,7 +480,7 @@ class HeelPrickBloodCollectionFormDb {
 
       return stats;
     } catch (e) {
-      print('Error getting place of collection stats: $e');
+    //  print('Error getting place of collection stats: $e');
       return {};
     }
   }
@@ -530,7 +530,7 @@ class HeelPrickBloodCollectionFormDb {
         'placeStats': placeStats,
       };
     } catch (e) {
-      print('Error getting form statistics: $e');
+    //  print('Error getting form statistics: $e');
       return {
         'totalForms': '0',
         'collected': 0,
@@ -560,7 +560,7 @@ class HeelPrickBloodCollectionFormDb {
           .map((map) => HeelPrickBloodCollectionFormModel.fromJson(map))
           .toList();
     } catch (e) {
-      print('Error getting incomplete forms: $e');
+    //  print('Error getting incomplete forms: $e');
       return [];
     }
   }
@@ -581,7 +581,7 @@ class HeelPrickBloodCollectionFormDb {
       );
       return rowsAffected;
     } catch (e) {
-      print('Error updating sync date: $e');
+    //  print('Error updating sync date: $e');
       return 0;
     }
   }

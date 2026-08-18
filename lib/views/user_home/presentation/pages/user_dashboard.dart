@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:heel_prick_blood_collection/controllers/growth_and_outcome_controller.dart';
+import 'package:heel_prick_blood_collection/controllers/server_query_controller%20copy.dart';
 import 'package:heel_prick_blood_collection/core/const/visit_type_enum.dart';
 import 'package:intl/intl.dart';
 import '../../../../controllers/home_controller.dart';
@@ -8,6 +10,7 @@ import '../../../../core/routes/app_routes.dart';
 import '../../../../core/utils/loader.dart';
 import '../utils/dashboard_items.dart';
 import '../widgets/real_time_clock.dart';
+import '../widgets/summary_widget.dart';
 
 class UserDashboard extends StatefulWidget {
   const UserDashboard({super.key});
@@ -33,7 +36,11 @@ class _UserDashboardState extends State<UserDashboard> {
         actions: [
           Text(
             'User Id : ${UserPrefs.userModel.userId}    ',
-            style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold, color: Colors.white),
+            style: TextStyle(
+              fontSize: 24,
+              fontWeight: FontWeight.bold,
+              color: Colors.white,
+            ),
           ),
           IconButton(
             onPressed: () {
@@ -133,12 +140,33 @@ class _UserDashboardState extends State<UserDashboard> {
                               onPressed: () async {
                                 await HomeController.to
                                     .uploadFollowupToServer();
-                                HomeController.to.exportDbFile();
+                                await GrowthAndOutcomeController.to
+                                    .backupEnrollmentData();
+                                await GrowthAndOutcomeController.to
+                                    .backupGrowthData();
+                                await GrowthAndOutcomeController.to
+                                    .backupSESData();
+                                // HomeController.to.exportDbFile();
                               },
                               child: Row(
                                 children: [
                                   Icon(Icons.upload_outlined),
                                   Text('Data Backup'),
+                                ],
+                              ),
+                            ),
+                    ),
+                    Obx(
+                      () => ServerQueryController.to.isLoading.value
+                          ? Center(child: CircularProgressIndicator())
+                          : ElevatedButton(
+                              onPressed: () async {
+                                ServerQueryController.to.getServerQuery();
+                              },
+                              child: Row(
+                                children: [
+                                  Icon(Icons.upload_outlined),
+                                  Text('Server Query'),
                                 ],
                               ),
                             ),
@@ -160,6 +188,8 @@ class _UserDashboardState extends State<UserDashboard> {
             children: [
               // Welcome Section
               _buildWelcomeSection(),
+              const SizedBox(height: 12),
+              _BuildSummarySection(),
               const SizedBox(height: 24),
 
               Obx(
@@ -267,59 +297,100 @@ class _UserDashboardState extends State<UserDashboard> {
       mainAxisSpacing: 16,
       childAspectRatio: 1.8,
       children: [
-        Obx(
-          () => HomeController.to.todoChild == -1
-              ? Center(child: CircularProgressIndicator())
-              : _buildStatCard(
-                  title:
-                      '${HomeController.to.todoChild.toString()} Out of ${HomeController.to.totalChild.toString()}',
-                  value: 'Enrollment Visit',
-                  icon: Icons.check_circle,
-                  color: Colors.lightBlue,
-                  onTap: () {
-                    Get.toNamed(AppRoutes.INFANTLISTSCREEN, arguments: VisitTypeEnum.Enrollment.name);
-                  },
-                ),
-        ),
-        _buildStatCard(
-          title:
-              '${HomeController.to.todoChild.toString()} Out of ${HomeController.to.totalChild.toString()}',
-          value: 'Growth Falter Visit',
-          icon: Icons.check_circle,
-          color: Colors.lightBlueAccent,
-          onTap: () {
-            Get.toNamed(AppRoutes.INFANTLISTSCREEN, arguments: VisitTypeEnum.GF.name);
-          },
-        ),
-        _buildStatCard(
-          title:
-              '${HomeController.to.todoChild.toString()} Out of ${HomeController.to.totalChild.toString()}',
-          value: '6th Month Visit',
-          icon: Icons.check_circle,
-          color: Colors.blueAccent,
-          onTap: () {
-            Get.toNamed(AppRoutes.INFANTLISTSCREEN, arguments: VisitTypeEnum.Six_Month.name);
-          },
-        ),
-        _buildStatCard(
-          title: 'Visit Done List',
-          value: 'Visit Done List',
-          icon: Icons.done_all,
-          color: Colors.green,
-          onTap: () {
-            Get.toNamed(AppRoutes.INFANTDONELISTSCREEN);
-          },
-        ),
+        if (UserPrefs.userModel.userLevel == '2') ...[
+          Obx(
+            () => HomeController.to.todoChild == -1
+                ? Center(child: CircularProgressIndicator())
+                : _buildStatCard(
+                    title:
+                        '${HomeController.to.todoChild.toString()} Out of ${HomeController.to.totalChild.toString()}',
+                    value: 'Enrollment Visit',
+                    icon: Icons.check_circle,
+                    color: Colors.lightBlue,
+                    onTap: () {
+                      Get.toNamed(
+                        AppRoutes.INFANTLISTSCREEN,
+                        arguments: VisitTypeEnum.Enrollment.name,
+                      );
+                    },
+                  ),
+          ),
+          _buildStatCard(
+            title:
+                '${HomeController.to.todoChild.toString()} Out of ${HomeController.to.totalChild.toString()}',
+            value: 'Growth Falter Visit',
+            icon: Icons.check_circle,
+            color: Colors.lightBlueAccent,
+            onTap: () {
+              Get.toNamed(
+                AppRoutes.INFANTLISTSCREEN,
+                arguments: VisitTypeEnum.GF.name,
+              );
+            },
+          ),
+          _buildStatCard(
+            title:
+                '${HomeController.to.todoChild.toString()} Out of ${HomeController.to.totalChild.toString()}',
+            value: '6th Month Visit',
+            icon: Icons.check_circle,
+            color: Colors.blueAccent,
+            onTap: () {
+              Get.toNamed(
+                AppRoutes.INFANTLISTSCREEN,
+                arguments: VisitTypeEnum.Six_Month.name,
+              );
+            },
+          ),
+          _buildStatCard(
+            title: 'Visit Done List',
+            value: 'Visit Done List',
+            icon: Icons.done_all,
+            color: Colors.green,
+            onTap: () {
+              Get.toNamed(AppRoutes.INFANTDONELISTSCREEN);
+            },
+          ),
 
-        _buildStatCard(
-          title: 'Refuse List',
-          value: 'Refuse List',
-          icon: Icons.remove_circle,
-          color: Colors.red,
-          onTap: () {
-            Get.toNamed(AppRoutes.INFANTDONELISTSCREEN, arguments: 'refuse');
-          },
-        ),
+          _buildStatCard(
+            title: 'Refuse List',
+            value: 'Refuse List',
+            icon: Icons.remove_circle,
+            color: Colors.red,
+            onTap: () {
+              Get.toNamed(AppRoutes.INFANTDONELISTSCREEN, arguments: 'refuse');
+            },
+          ),
+        ],
+        if (UserPrefs.userModel.userLevel == '1') ...[
+          _buildStatCard(
+            title: 'Pending Infant List',
+            value: 'Pending Infant List',
+            icon: Icons.remove_circle,
+            color: Colors.red,
+            onTap: () {
+              Get.toNamed(AppRoutes.PENDINGINFANTLIST, arguments: 'pending');
+            },
+          ),
+
+          _buildStatCard(
+            title: 'Todo Enrollment',
+            value: 'Todo Enrollment',
+            icon: Icons.remove_circle,
+            color: Colors.red,
+            onTap: () {
+              Get.toNamed(AppRoutes.TODOENROLLMENT);
+            },
+          ),
+          _buildStatCard(
+            title: 'Todo Growth And Outcome',
+            value: 'Todo Growth And Outcome',
+            icon: Icons.remove_circle,
+            color: Colors.red,
+            onTap: () {
+              Get.toNamed(AppRoutes.TODOGROWTHMONITORING);
+            },
+          ),
+        ],
       ],
     );
   }
@@ -387,6 +458,51 @@ class _UserDashboardState extends State<UserDashboard> {
           ),
         ),
       ),
+    );
+  }
+
+  // ignore: non_constant_identifier_names
+  Widget _BuildSummarySection() {
+    return Obx(
+      () => HomeController.to.isLoading.value
+          ? Center(child: CircularProgressIndicator())
+          : Container(
+              padding: const EdgeInsets.all(16),
+              decoration: BoxDecoration(
+                color: Colors.white,
+                borderRadius: BorderRadius.circular(16),
+                boxShadow: [
+                  BoxShadow(
+                    color: Colors.grey.shade200,
+                    blurRadius: 10,
+                    offset: const Offset(0, 4),
+                  ),
+                ],
+              ),
+              child: Row(
+                spacing: 32,
+                children: [
+                  SummaryWidget(
+                    label: 'Enrollment',
+                    count:
+                        '${HomeController.to.syncEn}/${HomeController.to.totalEn}',
+                    color: Colors.blue,
+                  ),
+                  SummaryWidget(
+                    label: 'Asset',
+                    count:
+                        '${HomeController.to.syncAs}/${HomeController.to.totalAs}',
+                    color: Colors.orangeAccent,
+                  ),
+                  SummaryWidget(
+                    label: 'P. Handover',
+                    count:
+                        '${HomeController.to.syncGf}/${HomeController.to.totalGf}',
+                    color: Colors.pink,
+                  ),
+                ],
+              ),
+            ),
     );
   }
 }
