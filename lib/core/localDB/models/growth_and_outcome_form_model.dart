@@ -35,6 +35,7 @@ class GrowthAndOutcomeFormModel {
 
   // Metadata
   final String infantId;
+  final String pregSl;
   final String? userId;
   final String? startDt;
   final String? enDt;
@@ -77,6 +78,7 @@ class GrowthAndOutcomeFormModel {
 
     // Metadata
     required this.infantId,
+    required this.pregSl,
     this.userId,
     this.startDt,
     this.enDt,
@@ -123,6 +125,7 @@ class GrowthAndOutcomeFormModel {
 
       // Metadata
       infantId: json[GrowthAndOutcomeFormField.infantId],
+      pregSl: json[GrowthAndOutcomeFormField.pregSl],
       userId: json[GrowthAndOutcomeFormField.userId],
       startDt: json[GrowthAndOutcomeFormField.startDt],
       enDt: json[GrowthAndOutcomeFormField.enDt],
@@ -168,6 +171,7 @@ class GrowthAndOutcomeFormModel {
 
       // Metadata
       GrowthAndOutcomeFormField.infantId: infantId,
+      GrowthAndOutcomeFormField.pregSl: pregSl,
       GrowthAndOutcomeFormField.userId: userId,
       GrowthAndOutcomeFormField.startDt: startDt,
       GrowthAndOutcomeFormField.enDt: enDt,
@@ -212,6 +216,7 @@ class GrowthAndOutcomeFormModel {
 
     // Metadata
     String? infantId,
+    String? pregSl,
     String? userId,
     String? startDt,
     String? enDt,
@@ -254,6 +259,7 @@ class GrowthAndOutcomeFormModel {
 
       // Metadata
       infantId: infantId ?? this.infantId,
+      pregSl: pregSl ?? this.pregSl,
       userId: userId ?? this.userId,
       startDt: startDt ?? this.startDt,
       enDt: enDt ?? this.enDt,

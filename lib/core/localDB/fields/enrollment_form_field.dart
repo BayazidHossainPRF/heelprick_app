@@ -34,6 +34,7 @@ class EnrollmentFormField {
     q602,
 
     infantId,
+    pregSL,
     dob,
     father,
     phone,
@@ -83,6 +84,7 @@ class EnrollmentFormField {
   static const String q602 = 'q602';
 
   static const String infantId = 'infantId';
+  static const String pregSL = 'preg_sl';
   static const String father = 'father';
   static const String phone = 'phone';
   static const String dob = 'dob';

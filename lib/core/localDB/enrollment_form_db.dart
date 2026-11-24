@@ -246,17 +246,21 @@ class EnrollmentFormDb {
                     AND date(en.dob, '+188 days') THEN '27'
             END AS visit_week
         FROM tbl_heel_prick_enrollment_form en
-    )
-
-    SELECT 
-        enrollment.*
-    FROM enrollment
-    LEFT JOIN tbl_heel_prick_growth_and_outcome_form gw
-        ON enrollment.infantId = gw.infantId
-        AND gw.q201 = enrollment.visit_week
-    WHERE enrollment.visit_week IS NOT NULL and enrollment.q602 is not null
-    and trim(enrollment.q602) != ''
-    and gw.enDt is null or trim(gw.enDt) = '';
+    ),
+    growth_visits as ( SELECT row_number() over(PARTITION by q101 order by q201 desc) as rn, * 
+      from tbl_heel_prick_growth_and_outcome_form	)
+  
+      SELECT enrollment.*
+      FROM enrollment
+      LEFT JOIN tbl_heel_prick_growth_and_outcome_form gw
+          ON enrollment.infantId = gw.infantId
+          AND gw.q201 = enrollment.visit_week
+    left join growth_visits gv
+      on enrollment.infantId = gv.infantId and gv.rn=1
+      WHERE enrollment.visit_week IS NOT NULL and enrollment.q602 is not null
+      and trim(enrollment.q602) != ''
+      and (gw.enDt is null or trim(gw.enDt) = '')
+    and (gv.q201c is null or gv.q201c not in ('14', '15', '16')) ;
     ''');
 
     if (maps.isEmpty) {

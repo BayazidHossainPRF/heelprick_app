@@ -3,6 +3,7 @@ import '../fields/heel_prick_blood_collection_form_fields.dart';
 class HeelPrickBloodCollectionFormModel {
   // Metadata fields
   final String infantId;
+  final String pregSl;
   final String visitType;
   final String visitDate;
   final String? syncDt;
@@ -44,6 +45,7 @@ class HeelPrickBloodCollectionFormModel {
 
   HeelPrickBloodCollectionFormModel({
     required this.infantId,
+    required this.pregSl,
     required this.visitType,
     required this.visitDate,
     this.syncDt,
@@ -84,6 +86,7 @@ class HeelPrickBloodCollectionFormModel {
     return HeelPrickBloodCollectionFormModel(
       // Metadata
       infantId: json[HeelPrickBloodCollectionFormFields.infantId],
+      pregSl: json[HeelPrickBloodCollectionFormFields.pregSl],
       visitType: json[HeelPrickBloodCollectionFormFields.visitType],
       visitDate: json[HeelPrickBloodCollectionFormFields.visitDate],
       syncDt: json[HeelPrickBloodCollectionFormFields.syncDt],
@@ -125,6 +128,7 @@ class HeelPrickBloodCollectionFormModel {
     return {
       // Metadata
       HeelPrickBloodCollectionFormFields.infantId: infantId,
+      HeelPrickBloodCollectionFormFields.pregSl: pregSl,
       HeelPrickBloodCollectionFormFields.visitType: visitType,
       HeelPrickBloodCollectionFormFields.visitDate: visitDate,
       HeelPrickBloodCollectionFormFields.syncDt: syncDt,
@@ -165,6 +169,7 @@ class HeelPrickBloodCollectionFormModel {
   HeelPrickBloodCollectionFormModel copyWith({
     // Metadata
     String? infantId,
+    String? pregSl,
     String? visitType,
     String? visitDate,
     String? syncDt,
@@ -203,6 +208,7 @@ class HeelPrickBloodCollectionFormModel {
     return HeelPrickBloodCollectionFormModel(
       // Metadata
       infantId: infantId ?? this.infantId,
+      pregSl: pregSl??this.pregSl,
       visitType: visitType ?? this.visitType,
       visitDate: visitDate ?? this.visitDate,
       syncDt: syncDt ?? this.syncDt,

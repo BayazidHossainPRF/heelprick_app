@@ -72,16 +72,16 @@ class _AssetFormScreenState extends State<AssetFormScreen> {
       TextEditingController(); // Roof other specify
   final NumberController _q213Controller =
       NumberController(); // Agricultural land
-  final NumberController _q215Controller = NumberController(); // Television
-  final NumberController _q216Controller = NumberController(); // Internet
-  final NumberController _q217Controller = NumberController(); // Refrigerator
-  final NumberController _q218Controller = NumberController(); // Wristwatch
-  final NumberController _q219Controller = NumberController(); // Motorcycle
-  final NumberController _q220Controller = NumberController(); // Water pump
-  final NumberController _q221Controller = NumberController(); // Solar plant
-  final NumberController _q222Controller = NumberController(); // Cabinet
-  final NumberController _q223Controller = NumberController(); // Sofa
-  final NumberController _q224Controller = NumberController(); // Divider
+  final NumberController _q215Controller = NumberController(); // Pressure cooker
+  final NumberController _q216Controller = NumberController(); // Television
+  final NumberController _q217Controller = NumberController(); // Internet
+  final NumberController _q218Controller = NumberController(); // Refrigerator
+  final NumberController _q219Controller = NumberController(); // Wristwatch
+  final NumberController _q220Controller = NumberController(); // Motorcycle
+  final NumberController _q221Controller = NumberController(); // Water pump
+  final NumberController _q222Controller = NumberController(); // Solar plant
+  final NumberController _q223Controller = NumberController(); // Cabinet
+  final NumberController _q224Controller = NumberController(); // Sofa
   final NumberController _q225Controller = NumberController(); // Divider
   final TextEditingController _entryDateController = TextEditingController();
 
@@ -653,10 +653,13 @@ class _AssetFormScreenState extends State<AssetFormScreen> {
 
   Future<void> _saveForm() async {
     if (formModel == null) return;
-    Position? position = await LocationService.getCurrentLocation();
-    if (position == null) {
-      Snackbar.show_e(message: 'Location Data Not Found');
-      return;
+    Position? position;
+    if(_entryDateController.text.isNotEmpty){
+      position = await LocationService.getCurrentLocation();
+      if (position == null) {
+        Snackbar.show_e(message: 'Location Data Not Found');
+        // return;
+      }
     }
 
     formModel = formModel!.copyWith(
@@ -695,13 +698,14 @@ class _AssetFormScreenState extends State<AssetFormScreen> {
       q222: _q222Controller.getValue(),
       q223: _q223Controller.getValue(),
       q224: _q224Controller.getValue(),
+      q225: _q225Controller.getValue(),
 
       entryDate: _entryDateController.text.trim(),
       syncDt: null,
       endDT: DateFormat('yyyy-MM-dd HH:mm').format(DateTime.now()),
 
-      lat: position.latitude.toStringAsFixed(6),
-      lng: position.longitude.toStringAsFixed(6),
+      lat: position?.latitude.toStringAsFixed(6),
+      lng: position?.longitude.toStringAsFixed(6),
     );
 
     await AssetDb.instance.updateForm(formModel!);

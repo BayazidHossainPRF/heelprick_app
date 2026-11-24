@@ -5,7 +5,7 @@ import 'controllers/auth_controller.dart';
 import 'controllers/home_controller.dart';
 import 'controllers/infant_controller.dart';
 import 'controllers/pending_infant_controller.dart';
-import 'controllers/server_query_controller copy.dart';
+import 'controllers/server_query_controller.dart';
 import 'core/routes/app_routes.dart';
 import 'core/theme/theme.dart';
 

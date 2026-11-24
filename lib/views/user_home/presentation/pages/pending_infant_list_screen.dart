@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:heel_prick_blood_collection/core/localDB/models/pending_infant_model.dart';
-import 'package:heel_prick_blood_collection/core/widgets/loader_widget.dart';
 import '../../../../controllers/pending_infant_controller.dart';
 import '../widgets/pending_infant_card_widget.dart';
 

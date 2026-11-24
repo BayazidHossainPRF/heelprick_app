@@ -43,6 +43,7 @@ class EnrollmentFormModel {
 
   // Metadata
   final String infantId;
+  final String pregSl;
   final String? father;
   final String? phone;
   final String? dob;
@@ -97,6 +98,7 @@ class EnrollmentFormModel {
 
     // Metadata
     required this.infantId,
+    required this.pregSl,
     this.father,
     this.phone,
     this.dob,
@@ -153,6 +155,7 @@ class EnrollmentFormModel {
 
       // Metadata
       infantId: json[EnrollmentFormField.infantId],
+      pregSl: json[EnrollmentFormField.pregSL],
       father: json[EnrollmentFormField.father],
       phone: json[EnrollmentFormField.phone],
       dob: json[EnrollmentFormField.dob],
@@ -210,6 +213,7 @@ class EnrollmentFormModel {
 
       // Metadata
       EnrollmentFormField.infantId: infantId,
+      EnrollmentFormField.pregSL: pregSl,
       EnrollmentFormField.father: father,
       EnrollmentFormField.phone: phone,
       EnrollmentFormField.dob: dob,
@@ -265,6 +269,7 @@ class EnrollmentFormModel {
 
     // Metadata
     String? infantId,
+    String? pregSl,
     String? father,
     String? phone,
     String? dob,
@@ -319,6 +324,7 @@ class EnrollmentFormModel {
 
       // Metadata
       infantId: infantId ?? this.infantId,
+      pregSl: pregSl ?? this.pregSl,
       father: father ?? this.father,
       phone: phone ?? this.phone,
       dob: dob ?? this.dob,

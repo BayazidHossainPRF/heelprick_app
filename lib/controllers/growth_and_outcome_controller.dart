@@ -11,6 +11,7 @@ import 'package:http/http.dart' as http;
 import 'package:intl/intl.dart';
 
 import '../core/const/app_secrets.dart';
+import '../core/prefs/user_prefs.dart';
 import '../core/utils/snackbar.dart';
 
 class GrowthAndOutcomeController extends GetxController {
@@ -167,6 +168,34 @@ class GrowthAndOutcomeController extends GetxController {
         .readAllTodoGrowthAndOutcome();
     print('EN data found : ${infantList.length}');
     _infants.addAll(infantList);
+    toggleLoading();
+  }
+
+  Future<void> downloadGrowthLastVisit() async {
+    toggleLoading();
+    await Future.delayed(const Duration(seconds: 1));
+    final url = Uri.parse(
+      '${AppSecrets.host}sync_last_growth_visit.php?tab_code=${UserPrefs.userModel.teamId}',
+    );
+    print('calling api : ${url.toString()}');
+    try {
+      final response = await http.get(url);
+      print(response.body);
+      if (response.statusCode == 200) {
+        List<dynamic> jsonData = jsonDecode(response.body);
+        for (var item in jsonData) {
+          GrowthAndOutcomeFormDb.instance.createNewFormWithReplace(
+            model: GrowthAndOutcomeFormModel.fromJson(item),
+          );
+        }
+        Snackbar.show_s(message: '${jsonData.length} Growth and Outcome visit downloaded');
+      } else {
+        // print("Error: ${response.statusCode}");
+        Snackbar.show_e(message: 'Error: ${response.statusCode}');
+      }
+    } catch (e) {
+      Snackbar.show_e(message: 'Exception: $e');
+    }
     toggleLoading();
   }
 }

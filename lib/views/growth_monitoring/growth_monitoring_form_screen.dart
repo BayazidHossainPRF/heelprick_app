@@ -4,15 +4,19 @@ import 'package:geolocator/geolocator.dart';
 import 'package:get/get.dart';
 import 'package:heel_prick_blood_collection/core/localDB/models/enrollment_form_model.dart';
 import 'package:heel_prick_blood_collection/core/localDB/models/growth_and_outcome_form_model.dart';
+import 'package:heel_prick_blood_collection/core/localDB/models/pending_infant_model.dart';
 import 'package:heel_prick_blood_collection/core/prefs/user_prefs.dart';
 import 'package:heel_prick_blood_collection/core/widgets/measurment_widget.dart';
 import 'package:intl/intl.dart';
 import '../../../../core/theme/app_pallete.dart';
 import '../../controllers/infant_controller.dart';
 import '../../core/localDB/data_db.dart';
+import '../../core/routes/app_routes.dart';
 import '../../core/utils/data_type/number_controller.dart';
 import '../../core/utils/location_service.dart';
+import '../../core/utils/snackbar.dart';
 import '../../core/utils/validators.dart';
+import '../../core/widgets/custom_button.dart';
 import '../../core/widgets/section_card_widget.dart';
 import '../../core/widgets/single_date_picker.dart';
 import '../followup_form/widgets/custom_button_with_icon_widget.dart';
@@ -33,6 +37,7 @@ class _GrowthMonitoringFormScreenState
   GrowthAndOutcomeFormModel? formModel;
   int activeSection = 1;
   bool isLoading = false;
+  int formCheckValue = 0;
   final TextStyle answerTextStyle = const TextStyle(fontSize: 17);
 
   // Section 1: Identification
@@ -45,6 +50,7 @@ class _GrowthMonitoringFormScreenState
   final TextEditingController _q104Controller =
       TextEditingController(); // Date of birth
   final TextEditingController _q105Controller = TextEditingController();
+  final NumberController _q225Controller = NumberController(); // Divider
 
   // Section 2: Consent
   final TextEditingController _q201Controller = TextEditingController();
@@ -65,6 +71,7 @@ class _GrowthMonitoringFormScreenState
       TextEditingController(); // Consent signed
   final NumberController _q303Controller = NumberController();
   final TextEditingController _q304Controller = TextEditingController();
+
   // Secttion 4: Anthropometry of Baby
   final TextEditingController _q401aController = TextEditingController();
   final TextEditingController _q401bController = TextEditingController();
@@ -230,6 +237,50 @@ class _GrowthMonitoringFormScreenState
             validator: Validators.requiredValidator,
           ),
         ),
+        if (formCheckValue == 1)
+          Center(
+            child: CustomButton(
+              text: 'Open SES Form',
+              onPressed: () async {
+                final pendingInfentModel = PendingInfantModel(
+                  infantId: infantModel.infantId,
+                  babyPid: infantModel.q602,
+                  childPid: infantModel.q102,
+                  siteWomanId: infantModel.q102,
+                  childName: infantModel.q104,
+                  fatherName: infantModel.father,
+                  cluster: infantModel.q102!.substring(0, 3),
+                );
+                Get.toNamed(
+                  AppRoutes.ASSETFORMSCREEN,
+                  arguments: pendingInfentModel,
+                )!.then((value) async {
+                  formCheckValue = await AssetDb.instance.checkDevider(
+                    infantModel.infantId,
+                  );
+                  setState(() {});
+                });
+              },
+            ),
+          )
+        else if (formCheckValue == 2)
+          Padding(
+            padding: const EdgeInsets.only(bottom: 8),
+            child: MyFormRadoButton(
+              title:
+                  'Q225. Divider / piece of wood / cardboard / metal to divide a room into different parts/sections \nএকটি ঘরকে বিভিন্ন অংশে বিভক্ত করার জন্য ডিভাইডার/কাঠের টুকরা/কার্ডবোর্ড/ধাতু বিদ্যমান',
+              options: {
+                1: 'Yes (হ্যাঁ)',
+                2: 'No (না)',
+                8: 'Don\'t know (জানি না)',
+              },
+              controller: _q225Controller,
+              validator: (value) => (_q225Controller.value == -1)
+                  ? "Room divider answer is required"
+                  : null,
+              isColumn: false,
+            ),
+          ),
       ],
     );
   }
@@ -460,6 +511,18 @@ class _GrowthMonitoringFormScreenState
           Expanded(
             child: CustomSubmitButtonWithIcon(
               onPressed: () async {
+                final isAssetFilled = await AssetDb.instance.checkFormExists(
+                  infantModel.infantId,
+                );
+                if (activeSection == 1 &&
+                    formCheckValue == 1 &&
+                    !isAssetFilled) {
+                  Snackbar.show_e(
+                    message: 'Please complete the asset form first',
+                  );
+                  return;
+                }
+
                 if (_validateCurrentSection()) {
                   await _saveCurrentSection();
                   if (activeSection == 4 || _endDT.text.isNotEmpty) {
@@ -533,6 +596,7 @@ class _GrowthMonitoringFormScreenState
 
   // Initialization
   Future<void> _firstInit() async {
+    formCheckValue = await AssetDb.instance.checkDevider(infantModel.infantId);
     // // Set autofilled fields
     _q101Controller.text = infantModel.q602 ?? '';
     _q102Controller.text = infantModel.q103 ?? '';
@@ -545,6 +609,7 @@ class _GrowthMonitoringFormScreenState
     formModel = await GrowthAndOutcomeFormDb.instance.createOrIgnoreForm(
       model: GrowthAndOutcomeFormModel(
         infantId: infantModel.infantId.toString().trim(),
+        pregSl: infantModel.pregSl.toString().trim(),
         q101: _q101Controller.text.toString().trim(),
         q105: _q105Controller.text.toString().trim(),
         q201: infantModel.visitWeek,
@@ -624,6 +689,10 @@ class _GrowthMonitoringFormScreenState
     );
 
     if (_endDT.text.trim().isNotEmpty) {
+      AssetDb.instance.updateDivider(
+        infantModel.infantId,
+        _q225Controller.getValue() ?? '',
+      );
       Position? position = await LocationService.getCurrentLocation();
       if (position == null) {
         // Snackbar.show_e(message: 'Location Data Not Found');

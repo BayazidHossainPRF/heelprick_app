@@ -645,6 +645,7 @@ class _HeelPrickBloodCollectionFormScreenState
         .createOrIgnoreForm(
           model: HeelPrickBloodCollectionFormModel(
             infantId: infantModel.infantId.toString().trim(),
+            pregSl: infantModel.pregSL.toString().trim(),
             visitDate: DateFormat('yyyy-MM-dd').format(DateTime.now()),
             visitType: infantModel.visitType.toString().trim(),
             q1_a: _q1_aController.text,

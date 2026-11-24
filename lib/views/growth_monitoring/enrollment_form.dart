@@ -278,8 +278,13 @@ class _EnrollmentFormScreenState extends State<EnrollmentFormScreen> {
               _endDT.text = DateFormat(
                 'yyyy-MM-dd HH:mm',
               ).format(DateTime.now());
-              setState(() {});
+
+
+            }else if((DateTime.tryParse(infantModel.dob.toString()) ?? DateTime.parse('1909-09-09')).add(Duration(days: 13)).difference(DateTime.now()).inDays<0){
+              _q202dController.value=-1;
+              Snackbar.show_e(message: 'As window period is finished so you can\'t show present.');
             }
+            setState(() {});
           },
           isColumnOptions: true,
         ),
@@ -651,11 +656,12 @@ class _EnrollmentFormScreenState extends State<EnrollmentFormScreen> {
 
     _q202aController.text = DateFormat('yyyy-MM-dd').format(DateTime.now());
     _q202bController.text = DateFormat('HH:mm').format(DateTime.now());
-    _q202cController.text = userId;
+    _q202cController.text = userId; 
 
     formModel = await EnrollmentFormDb.instance.createOrIgnoreForm(
       model: EnrollmentFormModel(
         infantId: infantModel.infantId.toString().trim(),
+        pregSl: infantModel.pregSl.toString().trim(),
         startDt: DateFormat('yyyy-MM-dd HH:mm').format(DateTime.now()),
         q101: _q101Controller.text,
         q102: _q102Controller.text,

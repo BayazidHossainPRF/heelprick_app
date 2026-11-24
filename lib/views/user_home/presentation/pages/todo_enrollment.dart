@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:heel_prick_blood_collection/core/localDB/models/pending_infant_model.dart';
+import 'package:heel_prick_blood_collection/core/utils/snackbar.dart';
 import '../../../../controllers/pending_infant_controller.dart';
 import '../../../../core/routes/app_routes.dart';
 import '../widgets/pending_infant_card_widget.dart';
@@ -92,13 +93,18 @@ class _TodoEnrollmentState extends State<TodoEnrollment> {
               return PendingInfantCard(
                 pendingInfant: infant,
                 onPressed: () {
-                  Get.toNamed(
-                    AppRoutes.ENROLLMENTFORM,
-                    arguments: infant,
-                  )!.then((value) async {
-                    await Future.delayed(const Duration(seconds: 1));
-                    PendingInfantController.to.fetchTodoEnrollmentList();
-                  });
+                   if((DateTime.tryParse(infant.dob.toString()) ?? DateTime.parse('1909-09-09')).add(Duration(days: 13)).difference(DateTime.now()).inDays<6){
+                     Get.toNamed(
+                       AppRoutes.ENROLLMENTFORM,
+                       arguments: infant,
+                     )!.then((value) async {
+                       await Future.delayed(const Duration(seconds: 1));
+                       PendingInfantController.to.fetchTodoEnrollmentList();
+                     });
+                   }else{
+                     Snackbar.show_e(message: 'Not in window period. Please follow the valid window period.');
+                   }
+
                 },
               );
             },

@@ -114,7 +114,8 @@ class AssetDb {
     final maps = await db.query(
       AssetFields.TABLE_NAME,
       columns: AssetFields.values,
-      where: '''${AssetFields.syncDt} is null 
+      where:
+          '''${AssetFields.syncDt} is null 
       and ${AssetFields.endDT} is not null
       and trim(${AssetFields.endDT}) != ''
       ''',
@@ -151,7 +152,8 @@ class AssetDb {
     try {
       final maps = await db.query(
         AssetFields.TABLE_NAME,
-        where: '${AssetFields.infantId} = ?',
+        where:
+            '${AssetFields.infantId} = ? and ${AssetFields.entryDate} is not null and trim(${AssetFields.entryDate}) != \'\' ',
         whereArgs: [infantId],
         limit: 1,
       );
@@ -283,6 +285,41 @@ class AssetDb {
     } catch (e) {
       print('Error counting asset ownership: $e');
       return 0;
+    }
+  }
+
+  Future<int> checkDevider(String infantId) async {
+    final db = await DataDb.instance.database;
+    try {
+      final result = await db.rawQuery(
+        'SELECT q225 FROM ${AssetFields.TABLE_NAME} WHERE infantId = ?',
+        [infantId],
+      );
+      // 1 = Form does not exist
+      if (result.isEmpty) {
+        return 1;
+      }
+      // 2 = Form exists, but q225 is NULL
+      if (result.first['q225'] == null) {
+        return 2;
+      }
+      // 0 = Form exists and q225 has a value
+      return 0;
+    } catch (e) {
+      print('Error checking asset ownership: $e');
+      return 0;
+    }
+  }
+
+  Future<void> updateDivider(String infantId, String data) async {
+    final db = await DataDb.instance.database;
+    try {
+      await db.rawQuery(
+        'UPDATE ${AssetFields.TABLE_NAME} set q225=?, sync_dt=null where infantId=?',
+        [data, infantId],
+      );
+    } catch (e) {
+      print('Error counting asset ownership: $e');
     }
   }
 

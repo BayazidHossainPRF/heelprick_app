@@ -26,6 +26,7 @@ class Snackbar {
       'Success',
       message,
       backgroundColor: backgroundColor,
+      colorText: Colors.white,
       duration: Duration(seconds: durationInSecond),
       snackPosition: SnackPosition.BOTTOM,
     );
@@ -40,6 +41,7 @@ class Snackbar {
       'Errpr',
       message,
       backgroundColor: backgroundColor,
+      colorText: Colors.white,
       duration: Duration(seconds: durationInSecond),
       snackPosition: SnackPosition.BOTTOM,
     );

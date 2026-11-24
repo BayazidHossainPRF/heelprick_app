@@ -92,20 +92,16 @@ class DataDb {
     // Directory downloadsDir = Directory("/storage/emulated/0/Download");
     // String backupPath = join(downloadsDir.path, "db_agri_farmer_data-backup.db");
 
-    // Pick a file
-    FilePickerResult? result = await FilePicker.platform.pickFiles(
+    final List<PlatformFile> result = await FilePicker.pickFiles(
       type: FileType.custom,
       allowedExtensions: ['db'],
     );
-
-    if (result == null) {
+    final String? backupPath = result.first.path;
+    // print("📂 Selected backup file: $backupPath");
+    if (backupPath == null) {
       // print("❌ No file selected");
       return;
     }
-
-    String backupPath = result.files.single.path!;
-    // print("📂 Selected backup file: $backupPath");
-
     // Read backup
     File backupFile = File(backupPath);
     List<int> bytes = await backupFile.readAsBytes();
@@ -191,6 +187,7 @@ class DataDb {
     await db.execute(
       ''' CREATE TABLE ${HeelPrickBloodCollectionFormFields.TABLE_NAME} (
         ${HeelPrickBloodCollectionFormFields.infantId} $textType NOT NULL,
+        ${HeelPrickBloodCollectionFormFields.pregSl} $textType NOT NULL,
         ${HeelPrickBloodCollectionFormFields.visitType} $textTypeN,
         ${HeelPrickBloodCollectionFormFields.visitDate} $textTypeN,
         ${HeelPrickBloodCollectionFormFields.syncDt} $textTypeN,
@@ -230,7 +227,7 @@ class DataDb {
         ${HeelPrickBloodCollectionFormFields.lng} $textTypeN,
         ${HeelPrickBloodCollectionFormFields.endDate} $textTypeN,
         
-        PRIMARY KEY (${HeelPrickBloodCollectionFormFields.infantId}, ${HeelPrickBloodCollectionFormFields.visitType}, ${HeelPrickBloodCollectionFormFields.visitDate})
+        PRIMARY KEY (${HeelPrickBloodCollectionFormFields.infantId}, ${HeelPrickBloodCollectionFormFields.visitType}, ${HeelPrickBloodCollectionFormFields.visitDate}, ${HeelPrickBloodCollectionFormFields.pregSl})
       )
     ''',
     );
@@ -254,7 +251,8 @@ class DataDb {
 
     await db.execute('''
   CREATE TABLE ${EnrollmentFormField.TABLE_NAME}(
-    ${EnrollmentFormField.infantId} $textType PRIMARY KEY,
+    ${EnrollmentFormField.infantId} $textType,
+    ${EnrollmentFormField.pregSL} $textType,
 
     ${EnrollmentFormField.q101} $textTypeN,
     ${EnrollmentFormField.q102} $textTypeN,
@@ -299,13 +297,15 @@ class DataDb {
     ${EnrollmentFormField.enDt} $textTypeN,
     ${EnrollmentFormField.lat} $textTypeN,
     ${EnrollmentFormField.lng} $textTypeN,
-    ${EnrollmentFormField.syncDt} $textTypeN
+    ${EnrollmentFormField.syncDt} $textTypeN,
+    PRIMARY KEY(${EnrollmentFormField.infantId}, ${EnrollmentFormField.pregSL})
   )
 ''');
 
 await db.execute('''
   CREATE TABLE ${GrowthAndOutcomeFormField.TABLE_NAME}(
     ${GrowthAndOutcomeFormField.infantId} $textType,
+    ${GrowthAndOutcomeFormField.pregSl} $textType,
 
     ${GrowthAndOutcomeFormField.q101} $textTypeN,
     ${GrowthAndOutcomeFormField.q105} $textTypeN,
@@ -341,7 +341,7 @@ await db.execute('''
     ${GrowthAndOutcomeFormField.lat} $textTypeN,
     ${GrowthAndOutcomeFormField.lng} $textTypeN,
     ${GrowthAndOutcomeFormField.syncDt} $textTypeN,
-    PRIMARY KEY (${GrowthAndOutcomeFormField.infantId}, ${GrowthAndOutcomeFormField.q201})
+    PRIMARY KEY (${GrowthAndOutcomeFormField.infantId}, ${GrowthAndOutcomeFormField.pregSl}, ${GrowthAndOutcomeFormField.q201})
   )
 ''');
 

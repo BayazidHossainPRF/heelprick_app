@@ -28,6 +28,7 @@ class GrowthAndOutcomeFormField {
     q404b,
 
     infantId,
+    pregSl,
     userId,
     startDt,
     enDt,
@@ -66,6 +67,7 @@ class GrowthAndOutcomeFormField {
   static const String q404b = 'q404b';
 
   static const String infantId = 'infantId';
+  static const String pregSl = 'preg_sl';
 
   static const String userId = 'userId';
   static const String startDt = 'startDt';

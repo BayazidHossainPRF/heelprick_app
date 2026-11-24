@@ -3,6 +3,7 @@ class HeelPrickBloodCollectionFormFields {
   static final List<String> values = [
     // Metadata
     infantId,
+    pregSl,
     visitType,
     visitDate,
     syncDt,
@@ -42,6 +43,7 @@ class HeelPrickBloodCollectionFormFields {
 
   // Metadata fields
   static const String infantId = 'infant_id';
+  static const String pregSl = 'preg_sl';
   static const String visitType = 'visit_type';
   static const String visitDate = 'visit_date';
   static const String syncDt = 'sync_dt';

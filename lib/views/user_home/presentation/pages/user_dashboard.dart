@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:heel_prick_blood_collection/controllers/growth_and_outcome_controller.dart';
-import 'package:heel_prick_blood_collection/controllers/server_query_controller%20copy.dart';
+import 'package:heel_prick_blood_collection/controllers/infant_controller.dart';
+import 'package:heel_prick_blood_collection/controllers/server_query_controller.dart';
 import 'package:heel_prick_blood_collection/core/const/visit_type_enum.dart';
 import 'package:intl/intl.dart';
 import '../../../../controllers/home_controller.dart';
@@ -35,7 +36,7 @@ class _UserDashboardState extends State<UserDashboard> {
         title: Text('Dashboard'),
         actions: [
           Text(
-            'User Id : ${UserPrefs.userModel.userId}    ',
+            'User Id : ${UserPrefs.userModel.userId}  Team:${UserPrefs.userModel.teamId}  ',
             style: TextStyle(
               fontSize: 24,
               fontWeight: FontWeight.bold,
@@ -120,7 +121,15 @@ class _UserDashboardState extends State<UserDashboard> {
                                     .uploadFollowupToServer();
                                 // await HomeController.to
                                 //     .uploadAddmissionDetailsToServer();
-                                await HomeController.to.downloadScreeningList();
+                                if (UserPrefs.userModel.userLevel == '1') {
+                                  InfantController.to.downloadEnrollmentData();
+                                  InfantController.to.downloadSESData();
+                                  GrowthAndOutcomeController.to
+                                      .downloadGrowthLastVisit();
+                                } else {
+                                  await HomeController.to
+                                      .downloadScreeningList();
+                                }
 
                                 Navigator.pop(context);
                               },
@@ -138,14 +147,17 @@ class _UserDashboardState extends State<UserDashboard> {
                           ? Center(child: CircularProgressIndicator())
                           : ElevatedButton(
                               onPressed: () async {
-                                await HomeController.to
-                                    .uploadFollowupToServer();
-                                await GrowthAndOutcomeController.to
-                                    .backupEnrollmentData();
-                                await GrowthAndOutcomeController.to
-                                    .backupGrowthData();
-                                await GrowthAndOutcomeController.to
-                                    .backupSESData();
+                                if (UserPrefs.userModel.userLevel == '1') {
+                                  await GrowthAndOutcomeController.to
+                                      .backupEnrollmentData();
+                                  await GrowthAndOutcomeController.to
+                                      .backupGrowthData();
+                                  await GrowthAndOutcomeController.to
+                                      .backupSESData();
+                                } else {
+                                  await HomeController.to
+                                      .uploadFollowupToServer();
+                                }
                                 // HomeController.to.exportDbFile();
                               },
                               child: Row(
@@ -202,8 +214,14 @@ class _UserDashboardState extends State<UserDashboard> {
                           onPressed: () async {
                             showLoader(context: context);
                             await HomeController.to.uploadFollowupToServer();
-
-                            await HomeController.to.downloadScreeningList();
+                            if (UserPrefs.userModel.userLevel == '1') {
+                              InfantController.to.downloadEnrollmentData();
+                              GrowthAndOutcomeController.to
+                                  .downloadGrowthLastVisit();
+                            } else {
+                              await HomeController.to
+                                  .downloadScreeningList();
+                            }
                             Navigator.pop(context);
                           },
                           child: Text('Download New Screening Data'),
@@ -495,7 +513,7 @@ class _UserDashboardState extends State<UserDashboard> {
                     color: Colors.orangeAccent,
                   ),
                   SummaryWidget(
-                    label: 'P. Handover',
+                    label: 'Growth Outcome',
                     count:
                         '${HomeController.to.syncGf}/${HomeController.to.totalGf}',
                     color: Colors.pink,

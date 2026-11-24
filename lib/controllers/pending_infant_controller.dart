@@ -50,6 +50,7 @@ class PendingInfantController extends GetxController {
     final data = {
       'baby_pid': model.babyPid,
       'user_id': UserPrefs.userModel.userId,
+      'tab_code':  UserPrefs.userModel.teamId,
       'infant_id': model.infantId,
     };
     print(data);

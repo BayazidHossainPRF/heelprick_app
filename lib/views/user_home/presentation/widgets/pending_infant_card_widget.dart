@@ -97,24 +97,47 @@ class PendingInfantCard extends StatelessWidget {
                   ),
                 ),
 
-                Container(
-                  padding: const EdgeInsets.symmetric(
-                    horizontal: 10,
-                    vertical: 5,
-                  ),
-                  decoration: BoxDecoration(
-                    color: Colors.blue.shade50,
-                    borderRadius: BorderRadius.circular(20),
-                  ),
-                  child: Text(
-                    'Cluster ${pendingInfant.cluster ?? 'N/A'}',
-                    style: TextStyle(
-                      fontSize: 11,
-                      fontWeight: FontWeight.w600,
-                      color: Colors.blue.shade700,
+                Column(
+                  spacing: 8,
+                  children: [
+                    Container(
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: 10,
+                        vertical: 5,
+                      ),
+                      decoration: BoxDecoration(
+                        color: Colors.blue.shade50,
+                        borderRadius: BorderRadius.circular(20),
+                      ),
+                      child: Text(
+                        'Cluster ${pendingInfant.cluster ?? 'N/A'}',
+                        style: TextStyle(
+                          fontSize: 13,
+                          fontWeight: FontWeight.w600,
+                          color: Colors.blue.shade700,
+                        ),
+                      ),
+                    ),Container(
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: 10,
+                        vertical: 5,
+                      ),
+                      decoration: BoxDecoration(
+                        color: Colors.pink.shade50,
+                        borderRadius: BorderRadius.circular(20),
+                      ),
+                      child: Text(
+                        'Remaining ${(DateTime.tryParse(pendingInfant.dob.toString()) ?? DateTime.parse('1909-09-09')).add(Duration(days: 13)).difference(DateTime.now()).inDays}',
+                        style: TextStyle(
+                          fontSize: 16,
+                          fontWeight: FontWeight.w600,
+                          color: Colors.pink.shade700,
+                        ),
+                      ),
                     ),
-                  ),
+                  ],
                 ),
+
               ],
             ),
 
@@ -190,6 +213,23 @@ class PendingInfantCard extends StatelessWidget {
                   ),
                 ),
                 _infoItem('Child PID', pendingInfant.childPid ?? 'N/A'),
+              ],
+            ),
+            Row(
+              children: [
+                _infoItem(
+                  'Start Date: ',
+                  DateFormat('dd MMM yyyy').format(
+                      (DateTime.tryParse(pendingInfant.dob.toString()) ??
+                        DateTime.parse('1909-09-09')).add(Duration(days: 7)),
+                  ),
+                ),_infoItem(
+                  'End Date: ',
+                  DateFormat('dd MMM yyyy').format(
+                    (DateTime.tryParse(pendingInfant.dob.toString()) ??
+                        DateTime.parse('1909-09-09')).add(Duration(days: 13)),
+                  ),
+                ),
               ],
             ),
           ],
